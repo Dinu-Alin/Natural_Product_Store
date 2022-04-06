@@ -39,5 +39,5 @@ public class PaymentDetails {
     private LocalDateTime modifiedAt;
 
     @OneToOne(fetch = FetchType.EAGER)
-    private Order orderDetails;
+    private Order order;
 }

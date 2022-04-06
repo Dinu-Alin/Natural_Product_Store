@@ -32,7 +32,7 @@ public class Order {
     private LocalDateTime modifiedAt;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "orderDetails", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     private PaymentDetails paymentDetails;
 
     @JsonIgnore
