@@ -25,6 +25,7 @@ public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(notes = "User ID", example = "1", required = true)
     private Long id;
 
     @NotNull
