@@ -3,12 +3,15 @@ package com.company.natural_product_store.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hibernate.annotations.FetchMode.SELECT;
 
 @Getter
 @Setter
@@ -47,5 +50,6 @@ public class Order {
 
     @JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = SELECT)
     private List<OrderItem> orderItems = new ArrayList<>();
 }

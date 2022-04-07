@@ -4,6 +4,7 @@ import com.company.natural_product_store.enums.security.ApplicationUserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.hibernate.annotations.FetchMode.SELECT;
 
 @Getter
 @Setter
@@ -88,6 +91,7 @@ public class AppUser {
     private ShoppingSession shoppingSession;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Fetch(value = SELECT)
     private List<Order> order = new ArrayList<>();
 }

@@ -38,6 +38,6 @@ public class PaymentDetails {
 
     private LocalDateTime modifiedAt;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     private Order order;
 }
