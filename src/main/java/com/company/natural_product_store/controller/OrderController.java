@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Api(value = "Orders Controller", tags = "/orders")
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
@@ -42,6 +44,10 @@ public class OrderController {
     @GetMapping("/{orderId}/payment")
     @PreAuthorize("hasAnyAuthority('payment:read')")
     public ResponseEntity<PaymentDetails> getPaymentByOrder(@PathVariable Long orderId, Principal principal) {
+
+        log.info(this.getClass().getName(), """
+                 GET Payment by PATH_V orderId, IF order is of logged in user
+                 """);
 
         if(orderId <= 0)
         {
@@ -58,6 +64,9 @@ public class OrderController {
     @PostMapping("/{orderId}/payment")
     public ResponseEntity<PaymentDetails> createPayment(@PathVariable Long orderId,
                                                         @RequestBody PaymentDetails paymentDetails){
+
+        log.info(this.getClass().getName()," POST Payment by PATH_V orderId, REQUEST_B paymentDetails");
+
         if(orderId <= 0)
         {
             throw new InvalidIdException("Id Invalid");
@@ -70,12 +79,15 @@ public class OrderController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<Order>> getAllOrders() {
 
+        log.info(this.getClass().getName()," GET ALL orders ---- ROLE: ADMIN");
         List<Order> orders = orderService.findAll();
         return ResponseEntity.ok(orders);
     }
     @GetMapping("/{orderId}/items")
     @PreAuthorize("hasAuthority('order:read')")
     public ResponseEntity<List<OrderItem>> getAllOrderItems(@PathVariable Long orderId, Principal principal) {
+
+        log.info(this.getClass().getName()," GET ALL order items of your order by PATH_V orderId");
         AppUser user = userService.findByUsername(principal.getName());
         List<Order> orders = orderService.findAllById(user.getId());
 
@@ -93,6 +105,9 @@ public class OrderController {
     @GetMapping()
     @PreAuthorize("hasAuthority('order:read')")
     public ResponseEntity<List<Order>> getAllOrdersByUserId(Principal principal) {
+
+        log.info(this.getClass().getName()," GET ALL orders by logged in user");
+
         AppUser user = userService.findByUsername(principal.getName());
         List<Order> orders = orderService.findAllById(user.getId());
 
@@ -103,9 +118,12 @@ public class OrderController {
     @PostMapping()
     @PreAuthorize("hasAuthority('order:write')")
     @Transactional
-    public ResponseEntity<Order> createOrder(@RequestBody() @ApiParam(value = "OrderDetails", required = true) Order order,
+    public ResponseEntity<Order> createOrder(@RequestBody() @ApiParam(value = "Order", required = true) Order order,
                                                     BindingResult bindingResult,
                                                     Principal principal) {
+
+        log.info(this.getClass().getName()," POST Order, REQUEST_B order");
+
         System.out.println("writeOrder");
 
         if (bindingResult.hasErrors()) {
@@ -139,6 +157,9 @@ public class OrderController {
     @PatchMapping("/{orderId}")
     @PreAuthorize("hasAuthority('order:write')")
     public ResponseEntity<Order> addOrderItemToOrder(@PathVariable Long orderId, @RequestBody @ApiParam Map<String, Object> requestBody) {
+
+        log.info(this.getClass().getName()," PATCH Order by PATH_V orderId, adding new order item, REQUEST_B orderItem");
+
         Objects.requireNonNull(orderId);
         final ObjectMapper objectReader = new ObjectMapper();
         requestBody.put("id", orderId);
@@ -162,6 +183,10 @@ public class OrderController {
     @DeleteMapping("/{orderId}")
     @PreAuthorize("hasAuthority('order:write')")
     public ResponseEntity<Order> deleteOrder(@PathVariable Long orderId){
+
+        log.info(this.getClass().getName()," DELETE by PATH_V orderId");
+
+
         orderService.deleteById(orderId);
         return ResponseEntity.ok().build();
     }
@@ -169,6 +194,9 @@ public class OrderController {
     @DeleteMapping
     @PreAuthorize("hasAuthority('order:write')")
     public ResponseEntity<Order> deleteAllOrders(Principal principal){
+
+        log.info(this.getClass().getName()," DELETE ALL orders of logged in user");
+
         AppUser user = userService.findByUsername(principal.getName());
         List<Order> orders = orderService.findAllById(user.getId());
 

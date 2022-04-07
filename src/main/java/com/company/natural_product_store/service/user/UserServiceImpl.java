@@ -6,15 +6,18 @@ import com.company.natural_product_store.exception.DataNotFoundException;
 import com.company.natural_product_store.exception.InvalidDataException;
 import com.company.natural_product_store.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -66,11 +69,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        System.out.println(username);
+        log.info("Connecting...");
         AppUser user = userRepository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("Could not find user")
         );
-        System.out.println(user.getUsername());
+        log.info(MessageFormat
+                .format("Connected with username: {} ---- ROLE: {}", user.getUsername(), user.getRole()));
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user, user.getRole().getGrantedAuthorities());
 
