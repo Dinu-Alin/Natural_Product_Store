@@ -1,6 +1,7 @@
 package com.company.natural_product_store.entity;
 
 import com.company.natural_product_store.enums.security.ApplicationUserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -71,9 +72,11 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private ApplicationUserRole role  = ApplicationUserRole.UNSPECIFIED;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private ShoppingSession shoppingSession;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Order> order = new ArrayList<>();
 }
