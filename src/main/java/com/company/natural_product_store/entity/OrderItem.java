@@ -30,7 +30,7 @@ public class OrderItem {
     private LocalDateTime modifiedAt;
 
     @NotNull
-    @OneToOne(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
     private Product product;
 
     @NotNull

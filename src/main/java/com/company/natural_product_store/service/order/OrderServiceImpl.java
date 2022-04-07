@@ -29,6 +29,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order findById(Long orderId) {
+        try {
+            return orderRepository.findById(orderId).orElseThrow(
+                    () -> new DataNotFoundException(
+                            MessageFormat.format("Could not find order with order ID: {0}", orderId))
+            );
+        } catch (DataNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InvalidDataException("Invalid order!");
+        }
+    }
+
+    @Override
     public Order save(Order order) {
         try {
             if (order.getCreatedAt() == null) {
@@ -55,12 +69,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public void deleteById(Long orderId) {
+        try {
+            orderRepository.deleteById(orderId);
+        } catch (Exception e) {
+            throw new DataNotFoundException("Invalid order!");
+        }
     }
 
     @Override
     public void deleteAll() {
-
+        try {
+            orderRepository.deleteAll();
+        } catch (Exception e) {
+            throw new InvalidDataException("Invalid request!");
+        }
     }
 }

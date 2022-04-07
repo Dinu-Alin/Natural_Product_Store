@@ -41,10 +41,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{userId}")
     @PreAuthorize("hasAuthority('user:write')")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        userService.deleteById(id);
+    public ResponseEntity<?> deleteById(@PathVariable Long userId) {
+        userService.deleteById(userId);
         return ResponseEntity.ok().build();
     }
 }

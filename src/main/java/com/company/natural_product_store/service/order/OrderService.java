@@ -9,11 +9,13 @@ public interface OrderService {
 
     List<Order> findAllById(Long userId);
 
+    Order findById(Long orderId);
+
     Order save(Order order);
 
     Order findOrderByUserIdWhereOrderId(Long userId, Long OrderId);
 
-    void deleteById(Long id);
+    void deleteById(Long orderId);
 
     void deleteAll();
 }

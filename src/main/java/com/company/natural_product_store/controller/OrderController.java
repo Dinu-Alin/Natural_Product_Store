@@ -94,8 +94,6 @@ public class OrderController {
     @PreAuthorize("hasAuthority('order:read')")
     public ResponseEntity<List<Order>> getAllOrdersByUserId(Principal principal) {
         AppUser user = userService.findByUsername(principal.getName());
-
-        System.out.println("The current user " + user.getUsername());
         List<Order> orders = orderService.findAllById(user.getId());
 
         return ResponseEntity.ok(orders);
@@ -144,7 +142,38 @@ public class OrderController {
         Objects.requireNonNull(orderId);
         final ObjectMapper objectReader = new ObjectMapper();
         requestBody.put("id", orderId);
-        final Order orderDetails = objectReader.convertValue(requestBody, Order.class);
-        return ResponseEntity.ok(orderService.save(orderDetails));
+
+        try{
+            final OrderItem orderItem = objectReader.convertValue(requestBody, OrderItem.class);
+            Order order = orderService.findById(orderId);
+
+            order.getOrderItems().add(orderItem);
+
+            return ResponseEntity.ok(orderService.save(order));
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @DeleteMapping("/{orderId}")
+    @PreAuthorize("hasAuthority('order:write')")
+    public ResponseEntity<Order> deleteOrder(@PathVariable Long orderId){
+        orderService.deleteById(orderId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasAuthority('order:write')")
+    public ResponseEntity<Order> deleteAllOrders(Principal principal){
+        AppUser user = userService.findByUsername(principal.getName());
+        List<Order> orders = orderService.findAllById(user.getId());
+
+        orders.forEach(order -> orderService.deleteById(order.getId()));
+
+        return ResponseEntity.ok().build();
     }
 }

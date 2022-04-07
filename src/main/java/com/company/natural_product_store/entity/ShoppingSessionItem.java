@@ -28,7 +28,7 @@ public class ShoppingSessionItem {
     private LocalDateTime modifiedAt;
 
     @NotNull
-    @OneToOne(mappedBy = "shoppingSessionItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     private Product product;
 
     @NotNull

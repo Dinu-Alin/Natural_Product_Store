@@ -1,6 +1,7 @@
 package com.company.natural_product_store.entity;
 
 import com.company.natural_product_store.enums.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,9 +41,11 @@ public class Product {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private ShoppingSessionItem shoppingSessionItem;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private OrderItem orderItem;
 }
