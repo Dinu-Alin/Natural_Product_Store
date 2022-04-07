@@ -36,6 +36,6 @@ public class SwaggerConfig {
      * @return ApiInfoBuilder
      */
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Swagger Store").description("Spring rest school for java").version("1.0").build();
+        return new ApiInfoBuilder().title("Swagger Natural Store").description("Final project").version("1.0").build();
     }
 }
