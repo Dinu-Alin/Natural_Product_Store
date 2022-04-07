@@ -33,6 +33,7 @@ public class Order {
     @ApiModelProperty(notes = "Order creation time, optional", example = "07/04/2022", required = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @ApiModelProperty(notes = "Order last modification time, optional", example = "07/04/2022", required = false)
     private LocalDateTime modifiedAt;
 
     @JsonIgnore

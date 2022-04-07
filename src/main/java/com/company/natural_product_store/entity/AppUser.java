@@ -76,6 +76,7 @@ public class AppUser {
     @ApiModelProperty(notes = "User creation time, optional", example = "07/04/2022", required = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @ApiModelProperty(notes = "User last modification time, optional", example = "07/04/2022", required = false)
     private LocalDateTime modifiedAt;
 
     @Enumerated(EnumType.STRING)

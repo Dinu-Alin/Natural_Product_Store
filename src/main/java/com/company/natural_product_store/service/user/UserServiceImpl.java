@@ -73,8 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         AppUser user = userRepository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("Could not find user")
         );
-        log.info(MessageFormat
-                .format("Connected with username: {} ---- ROLE: {}", user.getUsername(), user.getRole()));
+        log.info("Connected with username: {} ---- ROLE: {}", user.getUsername(), user.getRole());
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user, user.getRole().getGrantedAuthorities());
 
